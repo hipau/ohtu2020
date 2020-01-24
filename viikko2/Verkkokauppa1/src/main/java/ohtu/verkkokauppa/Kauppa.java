@@ -1,22 +1,26 @@
 package ohtu.verkkokauppa;
 
-public class Kauppa {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
+public class Kauppa {
+    
+    @Autowired
     private Sailytystila sailytystila;
+    @Autowired
     private Rahalaitos rahalaitos;
-    private Ostoskori ostoskori;
+    @Autowired
+    private Kori kori;
+    @Autowired
     private Numerogeneraattori numerogeneraattori;
     private String kaupanTili;
 
-    public Kauppa(Sailytystila sailytystila, Rahalaitos rahalaitos, Numerogeneraattori numerogeneraattori) {
-        this.sailytystila = sailytystila;
-        this.rahalaitos = rahalaitos;
-        this.numerogeneraattori = numerogeneraattori;
+    public Kauppa() {
         kaupanTili = "33333-44455";
     }
 
-    public void aloitaAsiointi() {
-        ostoskori = new Ostoskori();
+    public void aloitaAsiointi() {        
     }
 
     public void poistaKorista(int id) {
@@ -27,14 +31,14 @@ public class Kauppa {
     public void lisaaKoriin(int id) {
         if (sailytystila.saldo(id)>0) {
             Tuote t = sailytystila.haeTuote(id);             
-            ostoskori.lisaa(t);
+            kori.lisaa(t);
             sailytystila.otaVarastosta(t);
         }
     }
 
     public boolean tilimaksu(String nimi, String tiliNumero) {
         int viite = numerogeneraattori.uusi();
-        int summa = ostoskori.hinta();
+        int summa = kori.hinta();
         
         return rahalaitos.tilisiirto(nimi, viite, tiliNumero, kaupanTili, summa);
     }

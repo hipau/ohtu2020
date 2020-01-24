@@ -2,8 +2,10 @@
 package ohtu.verkkokauppa;
 
 import java.util.ArrayList;
+import org.springframework.stereotype.Component;
 
-public class Kirjanpito {
+@Component
+public class Kirjanpito implements Tapahtumaloki {
     private static Kirjanpito instance;
     
     public static Kirjanpito getInstance() {
@@ -20,10 +22,12 @@ public class Kirjanpito {
         tapahtumat = new ArrayList<String>();
     }
     
+    @Override
     public void lisaaTapahtuma(String tapahtuma) {
         tapahtumat.add(tapahtuma);
     }
 
+    @Override
     public ArrayList<String> getTapahtumat() {
         return tapahtumat;
     }       

@@ -1,8 +1,10 @@
 package ohtu.verkkokauppa;
 
 import java.util.ArrayList;
+import org.springframework.stereotype.Component;
 
-public class Ostoskori {
+@Component
+public class Ostoskori implements Kori {
 
     ArrayList<Tuote> tuotteet;
 
@@ -10,14 +12,17 @@ public class Ostoskori {
         tuotteet = new ArrayList<Tuote>();
     }
 
+    @Override
     public void lisaa(Tuote t) {
         tuotteet.add(t);
     }
 
+    @Override
     public void poista(Tuote t) {
         tuotteet.remove(t);
     }
 
+    @Override
     public int hinta() {
         int hinta = 0;
 

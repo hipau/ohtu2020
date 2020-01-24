@@ -1,5 +1,9 @@
 package ohtu.verkkokauppa;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class Pankki implements Rahalaitos {
 
     private static Pankki instanssi;
@@ -11,15 +15,17 @@ public class Pankki implements Rahalaitos {
 
         return instanssi;
     }
-    private Kirjanpito kirjanpito;
+    
+    @Autowired
+    private Tapahtumaloki tapahtumaloki;
 
     public Pankki() {
-        kirjanpito = Kirjanpito.getInstance();
+        tapahtumaloki = Kirjanpito.getInstance();
     }
 
     @Override
     public boolean tilisiirto(String nimi, int viitenumero, String tililta, String tilille, int summa) {
-        kirjanpito.lisaaTapahtuma("tilisiirto: tililtä " + tilille + " tilille " + tilille
+        tapahtumaloki.lisaaTapahtuma("tilisiirto: tililtä " + tililta + " tilille " + tilille
                 + " viite " + viitenumero + " summa " + summa + "e");
 
         // täällä olisi koodi joka ottaa yhteyden pankin verkkorajapintaan

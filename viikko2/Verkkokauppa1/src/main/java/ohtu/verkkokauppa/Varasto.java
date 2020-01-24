@@ -1,7 +1,10 @@
 package ohtu.verkkokauppa;
 
 import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Varasto implements Sailytystila {
 
     private static Varasto instanssi;
@@ -14,11 +17,11 @@ public class Varasto implements Sailytystila {
         return instanssi;
     }
     
-    private Kirjanpito kirjanpito;
+    @Autowired
+    private Tapahtumaloki tapahtumaloki;
     private HashMap<Tuote, Integer> saldot;  
     
-    private Varasto() {
-        kirjanpito = Kirjanpito.getInstance();
+    private Varasto() {        
         saldot = new HashMap<Tuote, Integer>();
         alustaTuotteet();
     }
@@ -40,13 +43,13 @@ public class Varasto implements Sailytystila {
     @Override
     public void otaVarastosta(Tuote t){        
         saldot.put(t,  saldo(t.getId())-1 );
-        kirjanpito.lisaaTapahtuma("otettiin varastosta "+t);
+        tapahtumaloki.lisaaTapahtuma("otettiin varastosta "+t);
     }
     
     @Override
     public void palautaVarastoon(Tuote t){
         saldot.put(t,  saldo(t.getId())+1 );
-        kirjanpito.lisaaTapahtuma("palautettiin varastoon "+t);
+        tapahtumaloki.lisaaTapahtuma("palautettiin varastoon "+t);
     }    
     
     private void alustaTuotteet() {
