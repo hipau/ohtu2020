@@ -19,8 +19,7 @@ public class Pankki implements Rahalaitos {
     @Autowired
     private Tapahtumaloki tapahtumaloki;
 
-    public Pankki() {
-        tapahtumaloki = Kirjanpito.getInstance();
+    public Pankki() {        
     }
 
     @Override
