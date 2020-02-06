@@ -36,7 +36,7 @@ public class KauppaTest {
         k.tilimaksu("pekka", "12345");
 
         // sitten suoritetaan varmistus, että pankin metodia tilisiirto on kutsuttu
-        verify(pankki).tilisiirto(anyString(), anyInt(), anyString(), anyString(),anyInt());   
+        verify(pankki).tilisiirto(anyString(), anyInt(), anyString(), anyString(),anyInt());
         // toistaiseksi ei välitetty kutsussa käytetyistä parametreista
     }
     
@@ -93,6 +93,86 @@ public class KauppaTest {
         k.tilimaksu("pekka", "12345");
         
         verify(pankki).tilisiirto(eq("pekka"), eq(42), eq("12345"), eq("33333-44455"), eq(5));
+    }
+    
+    @Test
+    public void aloitaAsiointiNollaaEdellisetOstokset() {
+        when(varasto.saldo(1)).thenReturn(10);
+        when(varasto.haeTuote(1)).thenReturn(new Tuote(1, "maito", 5));
+        when(varasto.saldo(2)).thenReturn(10);
+        when(varasto.haeTuote(2)).thenReturn(new Tuote(2, "leipä", 2));
+        
+        // Annetaan yksilölliset viitteet ostoksille
+        when(viite.uusi())
+                .thenReturn(47)
+                .thenReturn(52);
+        
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.tilimaksu("pekka", "12345");
+        
+        verify(pankki, times(1)).tilisiirto(anyString(), anyInt(), anyString(), anyString(), anyInt());
+        
+        k.aloitaAsiointi();
+        k.lisaaKoriin(2);
+        k.tilimaksu("pekka", "12345");
+        
+        verify(pankki, times(2)).tilisiirto(anyString(), anyInt(), anyString(), anyString(), anyInt());
+        verify(pankki).tilisiirto(eq("pekka"), eq(52), eq("12345"), eq("33333-44455"), eq(2));        
+    }
+    
+    @Test
+    public void jokainenMaksutapahtumaSaaUudenViitenumeron() {
+        when(varasto.saldo(1)).thenReturn(10);
+        when(varasto.haeTuote(1)).thenReturn(new Tuote(1, "maito", 5));
+        when(varasto.saldo(2)).thenReturn(10);
+        when(varasto.haeTuote(2)).thenReturn(new Tuote(2, "leipä", 2));
+        
+        when(viite.uusi())
+                .thenReturn(47)
+                .thenReturn(52)
+                .thenReturn(99);
+        
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.lisaaKoriin(2);
+        k.tilimaksu("pekka", "12345");
+        
+        verify(pankki, times(1)).tilisiirto(anyString(), anyInt(), anyString(), anyString(), anyInt());
+        
+        k.aloitaAsiointi();
+        k.lisaaKoriin(2);
+        k.lisaaKoriin(2);
+        k.tilimaksu("pekka", "12345");
+        
+        verify(pankki, times(2)).tilisiirto(anyString(), anyInt(), anyString(), anyString(), anyInt());
+        
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.tilimaksu("pekka", "12345");
+        
+        verify(pankki, times(3)).tilisiirto(anyString(), anyInt(), anyString(), anyString(), anyInt());
+                
+        verify(pankki).tilisiirto(eq("pekka"), eq(47), eq("12345"), eq("33333-44455"), eq(7));
+        verify(pankki).tilisiirto(eq("pekka"), eq(52), eq("12345"), eq("33333-44455"), eq(4));
+        verify(pankki).tilisiirto(eq("pekka"), eq(99), eq("12345"), eq("33333-44455"), eq(5));
+    }
+    
+    @Test
+    public void tuotteenPoistaminenKoristaAlentaaHintaa() {
+        when(varasto.saldo(1)).thenReturn(10);
+        when(varasto.haeTuote(1)).thenReturn(new Tuote(1, "maito", 5));
+        when(varasto.saldo(2)).thenReturn(10);
+        when(varasto.haeTuote(2)).thenReturn(new Tuote(2, "leipä", 2));
+        
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.lisaaKoriin(2);
+        k.lisaaKoriin(2);
+        k.poistaKorista(2);
+        k.tilimaksu("pekka", "12345");
+        
+        verify(pankki).tilisiirto(eq("pekka"), eq(42), eq("12345"), eq("33333-44455"), eq(7));
     }
 }
 

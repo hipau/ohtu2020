@@ -25,8 +25,19 @@ public class Kauppa {
     }
 
     public void poistaKorista(int id) {
-        Tuote t = varasto.haeTuote(id); 
-        varasto.palautaVarastoon(t);
+        // Oletan että metodin saa korjata, eihän tässä poistamisessa muuten ole järkeä.
+        // Jos ostoskori.poista() palauttaisi tiedon onnistuiko poisto (remove-metodin
+        // paluuarvo!) voisi tämän toteuttaa elegantimminkin, kun ei tarvitsisi muuta
+        // kuin tarkistaa paluuarvo jotta tietää voiko varastoon palauttaa.      
+        Tuote t = varasto.haeTuote(id);
+                
+        for(Tuote ostoskorinTuote : ostoskori.tuotteet) {
+            if(t.equals(ostoskorinTuote)) {
+                ostoskori.poista(t);
+                varasto.palautaVarastoon(t);
+                break;
+            }
+        }
     }
 
     public void lisaaKoriin(int id) {
