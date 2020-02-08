@@ -58,10 +58,10 @@ public class TennisGame {
     private String adsOrWinnerToString(int score1, int score2) {
         String scoreAsString;
         int minusResult = score1 - score2;
-        if (minusResult == 1) scoreAsString ="Advantage player1";
-        else if (minusResult == -1) scoreAsString ="Advantage player2";
-        else if (minusResult >= 2) scoreAsString = "Win for player1";
-        else if (minusResult <= -2) scoreAsString = "Win for player2";
+        if (minusResult == 1) scoreAsString = "Advantage " + player1Name;
+        else if (minusResult == -1) scoreAsString ="Advantage " + player2Name;
+        else if (minusResult >= 2) scoreAsString = "Win for " + player1Name;
+        else if (minusResult <= -2) scoreAsString = "Win for " + player2Name;
         else scoreAsString = "Deuce";
         return scoreAsString;
     }
