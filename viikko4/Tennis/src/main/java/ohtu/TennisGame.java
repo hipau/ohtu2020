@@ -23,15 +23,13 @@ public class TennisGame {
         String score = "";
         if (player1Score >= GAME_LENGTH || player2Score >= GAME_LENGTH) {
             score = adsOrWinnerToString(player1Score, player2Score);
-        }
-        else if (player1Score == player2Score) {
-            score = scoreToString(player1Score) + "-All";
-        }
+        }        
         else {
-            score = scoreToString(player1Score) + "-" + scoreToString(player2Score);
+            score = scoreToString(player1Score) + "-";
+            score += (player1Score == player2Score ? "All" : scoreToString(player2Score));
         }
         return score;
-    }
+    }       
     
     private String scoreToString(int score) {
         String scoreAsString;
