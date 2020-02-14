@@ -10,8 +10,15 @@ public abstract class Operaatio extends Komento {
     
     @Override
     public void suorita() {
+        int arvo = 0;        
+        try {
+            arvo = Integer.parseInt(tuloskentta.getText());
+        } catch(Exception e) {
+        }
+        super.edellinen = arvo;
+                
         laske();
-        
+
         int laskunTulos = sovellus.tulos();
         
         syotekentta.setText("");
@@ -23,6 +30,14 @@ public abstract class Operaatio extends Komento {
             nollaa.disableProperty().set(false);
         }
         undo.disableProperty().set(false);
+    }
+    
+    @Override
+    public void peru() {
+        sovellus.nollaa();
+        sovellus.plus(edellinen);
+        syotekentta.setText("");
+        tuloskentta.setText("" + super.edellinen);
     }
     
     protected abstract void laske();

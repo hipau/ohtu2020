@@ -16,10 +16,4 @@ public class Summa extends Operaatio {
         }
         sovellus.plus(arvo);
     }
-    
-    @Override
-    public void peru() {
-        
-    }
-    
 }

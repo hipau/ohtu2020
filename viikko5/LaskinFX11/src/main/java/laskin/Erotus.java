@@ -15,11 +15,5 @@ public class Erotus extends Operaatio {
         } catch(Exception e) {
         }        
         sovellus.miinus(arvo);
-    }
-    
-    @Override
-    public void peru() {
-        
-    }
-    
+    }    
 }
