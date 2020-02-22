@@ -9,7 +9,14 @@ public class QueryBuilder {
     }   
     
     public Matcher build() {
-        return matcher;
+        Matcher buildMatcher = this.matcher;
+        this.matcher = new All();
+        return buildMatcher;
+    }
+    
+    public QueryBuilder oneOf(Matcher... matchers) {
+        this.matcher = new Or(matchers);
+        return this;
     }
     
     public QueryBuilder hasAtLeast(int value, String category) {
@@ -25,5 +32,5 @@ public class QueryBuilder {
     public QueryBuilder playsIn(String team) {
         this.matcher = new And(matcher, new PlaysIn(team));
         return this;
-    }
+    }    
 }
