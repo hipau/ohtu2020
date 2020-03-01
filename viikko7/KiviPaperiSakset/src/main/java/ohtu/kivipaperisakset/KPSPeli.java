@@ -2,13 +2,25 @@ package ohtu.kivipaperisakset;
 import java.util.Scanner;
 
 
-public abstract class PeliOperaatio {
+public abstract class KPSPeli {
     protected static final Scanner scanner = new Scanner(System.in);    
     private Tuomari tuomari;
     protected String ekanSiirto;
     protected String tokanSiirto;
     
-    public PeliOperaatio() {
+    public static KPSPeli luoKaksinpeli() {
+        return new KPSPelaajaVsPelaaja();
+    }
+    
+    public static KPSPeli luoTekoalypeli() {
+        return new KPSTekoaly();
+    }
+    
+    public static KPSPeli luoParempiTekoalypeli() {
+        return new KPSParempiTekoaly();
+    }
+    
+    protected KPSPeli() {
         this.tuomari = new Tuomari();        
     }
     

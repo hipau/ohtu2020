@@ -1,7 +1,7 @@
 package ohtu.kivipaperisakset;
 import java.util.Scanner;
 
-public class KPSTekoaly extends PeliOperaatio {    
+public class KPSTekoaly extends KPSPeli {    
     private Tekoaly tekoaly;
     
     public KPSTekoaly() {
